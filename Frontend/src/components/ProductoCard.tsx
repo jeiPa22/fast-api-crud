@@ -1,4 +1,5 @@
 import "./ProductoCard.css";
+import React from "react";
 
 interface Product {
   id: number;
@@ -14,17 +15,34 @@ interface Props {
 }
 
 const ProductoCard = ({ product }: Props) => {
-  const placeholderImage = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='150' viewBox='0 0 200 150'%3E%3Crect width='200' height='150' fill='%23f0f0f0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='%23999'%3EImagen no disponible%3C/text%3E%3C/svg%3E";
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const img = e.currentTarget;
+    // Si falla, mostrar un color de fondo en lugar de imagen rota
+    img.style.display = "none";
+    const parent = img.parentElement;
+    if (parent) {
+      parent.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+      parent.style.display = "flex";
+      parent.style.alignItems = "center";
+      parent.style.justifyContent = "center";
+      const text = document.createElement("p");
+      text.textContent = "📸";
+      text.style.fontSize = "48px";
+      parent.appendChild(text);
+    }
+  };
 
   return (
     <div className="producto-card">
       <img
         src={product.image}
         alt={product.name}
-        onError={(e) => ((e.target as HTMLImageElement).src = placeholderImage)}
+        className="producto-imagen"
+        onError={handleImageError}
       />
       <h3>{product.name}</h3>
-      <p>{product.description}</p>
+      <p className="categoria">{product.category}</p>
+      <p className="descripcion">{product.description}</p>
       <p className="precio">${product.price.toLocaleString("es-CO")}</p>
       <button className="btn-comprar">🛒 Agregar al carrito</button>
     </div>
