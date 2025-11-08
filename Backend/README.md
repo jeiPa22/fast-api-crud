@@ -48,17 +48,40 @@ python3 -m uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 ### Endpoints principales
 
-#### Autenticación
-- `POST /auth/register` - Registrar nuevo usuario
-- `POST /auth/login` - Iniciar sesión y obtener token
-- `GET /me` - Obtener perfil del usuario actual (requiere token)
+#### Autenticación (SIN PROTECCIÓN - públicos)
+- `GET /` - Página de inicio con instrucciones
+- `POST /auth/register` - Registrar nuevo usuario (NO requiere token)
+- `POST /auth/login` - Iniciar sesión y obtener token (NO requiere token)
 
-#### Usuarios (requieren autenticación)
+#### Rutas protegidas (requieren token JWT)
+- `GET /me` - Obtener tu perfil
 - `GET /usuarios/` - Listar todos los usuarios
 - `POST /usuarios/` - Crear nuevo usuario
 - `GET /usuarios/{id}` - Obtener usuario por ID
 - `PUT /usuarios/{id}` - Actualizar usuario
 - `DELETE /usuarios/{id}` - Eliminar usuario
+
+## Flujo de autenticación
+
+### 1. Inicio
+Accede a http://localhost:8090 para ver las instrucciones
+
+### 2. Registrarse
+```bash
+POST /auth/register
+```
+
+### 3. Login
+```bash
+POST /auth/login
+```
+Obtendrás un token JWT
+
+### 4. Usar endpoints protegidos
+1. Copia el token del paso 3
+2. En Swagger, haz clic en "Authorize"
+3. Ingresa: `Bearer TU_TOKEN`
+4. Ahora puedes usar todos los endpoints protegidos
 
 ### Ejemplo de uso con curl
 
